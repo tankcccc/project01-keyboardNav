@@ -10,8 +10,11 @@
 </head>
 <body>
     <header></header>
-    <main >
-        <div class="wrapper" id="mainXXXX"></div>
+    <main>
+    <style>
+       
+    </style>
+        <div class="wrapper" id="main"></div>
     </main>
     <footer></footer>
     <script>
@@ -22,7 +25,7 @@
             length:3
         }
         var hash={
-            q: 'qq.com', w: 'weibo.com', e: 'ele.me', r: 'renren.com', t: 'tianya.com', y: 'youtube.com', u: 'uc.com' , i: 'iqiyi.com', o: 'opera.com', p: undefined, a: 'acfun.tv', s: 'sohu.com', z: 'zhihu.com', m: 'www.mcdonalds.com.cn'
+            q: 'qq.com', w: 'weibo.com', e: 'ele.me', r: 'renren.com', t: 'tianya.com', y: 'youtube.com', u: 'uc.com' , i: 'iqiyi.com', o: 'opera.com', p: undefined, a: 'acfun.cn', s: 'sohu.com', z: 'zhihu.com', m: 'www.mcdonalds.com.cn'
         }
         //取出localStroge中的zzz对应的hash
         var hashInLocalStroge = JSON.parse(localStorage.getItem('zzz') || 'null')
@@ -32,18 +35,40 @@
         var index =0
         while(index<keys['length']){
             var div1=document.createElement('div')
-            mainXXXX.appendChild(div1)
+            main.appendChild(div1)
+            div1.className='row'
             index2=0
             row=keys[index]//0-9  0-8  0-6
             while(index2<row['length']){
-                var kdbXXXX=document.createElement('kbd')
-                kdbXXXX.textContent=row[index2]
-                div1.appendChild(kdbXXXX)
-                var btnXXXX=document.createElement('button')
-                kdbXXXX.appendChild(btnXXXX)
-                btnXXXX.textContent='编辑'
-                btnXXXX.id=row[index2]
-                btnXXXX.onclick=function(event){
+                var kbd=document.createElement('kbd')
+                // kbd.textContent=row[index2]
+                div1.appendChild(kbd)
+                var button=document.createElement('button')
+                kbd.appendChild(button)
+                //把字母放进去
+                var span=document.createElement('span')
+                span.textContent=row[index2]
+                kbd.append(span)
+                span.className='text'
+
+                kbd.className='key'
+                button.textContent='编辑'
+                button.id=row[index2]
+                //生成图片
+                var img= document.createElement('img')
+                //生成图判断
+                if (hash[row[index2]]) {
+                    img.src='http://'+ hash[row[index2]]+'/favicon.ico'
+                } else {
+                    img.src='./img/16.png'
+                }
+                img.onerror=function(event){
+                    console.log('下载失败了')
+                    event.target.src='./img/16.png'
+                }
+               
+                kbd.appendChild(img)
+                button.onclick=function(event){
                     key=event.target.id
                     x=prompt('请输入一个网址')
                     hash[key]=x  //hash变更
