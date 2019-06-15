@@ -18,6 +18,7 @@
     </main>
     <footer></footer>
     <script>
+        //1.初始化数据
         var keys={
             0:{0:'q',1:'w',2:'e',3:'r',4:'t',5:'y',6:'u',7:'i',8:'o',9:'p',length:10},
             1:{0:'a',1:'s',2:'d',3:'f',4:'g',5:'h',6:'j',7:'k',8:'l',length:9},
@@ -28,25 +29,31 @@
             q: 'qq.com', w: 'weibo.com', e: 'ele.me', r: 'renren.com', t: 'tianya.com', y: 'youtube.com', u: 'uc.com' , i: 'iqiyi.com', o: 'opera.com', p: undefined, a: 'acfun.cn', s: 'sohu.com', z: 'zhihu.com', m: 'www.mcdonalds.com.cn'
         }
         //取出localStroge中的zzz对应的hash
-        var hashInLocalStroge = JSON.parse(localStorage.getItem('zzz') || 'null')
+        var hashInLocalStroge = hashInLocalStroge('zzz')
         if (hashInLocalStroge) {
             hash=hashInLocalStroge
         }
-        var index =0
-        while(index<keys['length']){
-            var div1=document.createElement('div')
+        
+      
+
+        //2.生成键盘
+        function tag(tagName){
+            return document.createElement(tagName)
+        }
+        for(var index =0;index<keys['length']; index =index+1){
+            var div1=tag('div')
             main.appendChild(div1)
             div1.className='row'
-            index2=0
+           
             row=keys[index]//0-9  0-8  0-6
-            while(index2<row['length']){
-                var kbd=document.createElement('kbd')
+            for(var index2=0; index2<row['length']; index2=index2+1){
+                var kbd=tag('kbd')
                 // kbd.textContent=row[index2]
                 div1.appendChild(kbd)
-                var button=document.createElement('button')
+                var button=tag('button')
                 kbd.appendChild(button)
                 //把字母放进去
-                var span=document.createElement('span')
+                var span=tag('span')
                 span.textContent=row[index2]
                 kbd.append(span)
                 span.className='text'
@@ -55,7 +62,7 @@
                 button.textContent='编辑'
                 button.id=row[index2]
                 //生成图片
-                var img= document.createElement('img')
+                var img= tag('img')
                 //生成图判断
                 if (hash[row[index2]]) {
                     img.src='http://'+ hash[row[index2]]+'/favicon.ico'
@@ -63,25 +70,30 @@
                     img.src='./img/16.png'
                 }
                 img.onerror=function(event){
-                    console.log('下载失败了')
                     event.target.src='./img/16.png'
                 }
-               
                 kbd.appendChild(img)
                 button.onclick=function(event){
-                    key=event.target.id
-                    x=prompt('请输入一个网址')
-                    hash[key]=x  //hash变更
+                   var button2 = event['target']
+                   console.log(button2.previousSibling)
+                   var img2 = button2.nextSibling.nextSibling
+                   console.log(img2)
+                   var key= button2['id']
+                   var x=prompt('请输入一个网址')
+                   hash[key]=x  //hash变更
+                    // img2.src='http://'+x+'/favicon.ico'
+                    img2.src='http://' + x + '/favicon.ico'
+                    img2.onerror = function(event){
+                        event.target.src='./img/16.png'
+                    }
                     localStorage.setItem('zzz',JSON.stringify(hash))
-                    console.log(hash)
-
-                  
                 }
-                index2=index2+1
             }
-            index =index+1
-
         }
+        
+
+
+        //3.监听键盘
         document.onkeypress=function(event){
             console.log(event)
             key=event['key'] //q,w,e
@@ -89,6 +101,12 @@
             website=hash[key]
             window.open('http://'+website, '_blank')
         }
+
+
+        function hashInLocalStroge(name){
+          return  JSON.parse(localStorage.getItem(name) || 'null')
+        }
+
     </script>
 </body>
 </html>
